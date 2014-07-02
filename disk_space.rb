@@ -9,16 +9,15 @@ module PRTG
       @doc = Nokogiri::XML( xml )
     end
 
-    def items( &block )
-      @doc.xpath("//item").each do |n|
-        block.yield Item.new(n)
-      end
+    def items
+      @doc.xpath("//item").map{|i| Item.new(i) }
     end
 
   end
 
   class Item
     attr_reader :coverage_raw
+    attr_reader :date
 
     def initialize( item )
       # nothing here yet

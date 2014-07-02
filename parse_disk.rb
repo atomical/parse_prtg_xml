@@ -2,6 +2,7 @@
 
 require 'slop'
 require 'nokogiri'
+require 'pp'
 require './disk_space.rb'
 
 
@@ -14,9 +15,7 @@ opts = Slop.parse do
   on 'channel=', 'channel'
 end
 
-
 def print_subnodes(subnodes, opts)
-
   subnodes.each do | node |
     datetime = node.xpath("datetime").text
     channel = node.xpath("#{opts[:channel]}").text
@@ -24,12 +23,9 @@ def print_subnodes(subnodes, opts)
 
     print date_str[0..8] + ',' + channel + "\n"
   end
-
 end
 
 disk_space = PRTG::DiskSpace.load_xml('vfsmcbitsdb.xml')
-disk_space.items.each do |item|
-  p item.coverage_raw
-end
+pp disk_space.items
 
 
