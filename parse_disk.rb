@@ -2,6 +2,7 @@
 
 require 'slop'
 require 'nokogiri'
+require './disk_space.rb'
 
 
 #get some options.  cool stuff like usernames and passwords can go in here
@@ -13,18 +14,6 @@ opts = Slop.parse do
   on 'channel=', 'channel'
 end
 
-#we're only going to load one file at a time.
-
-
-
-def load_file(filename, opts)
-  file = File.new(opts[:filename])
-  doc  = Nokogiri::XML file
-  return doc
-end
-
-#within the downloaded XML file, 
-subnodes = doc.xpath("//item")
 
 def print_subnodes(subnodes, opts)
 
@@ -38,6 +27,9 @@ def print_subnodes(subnodes, opts)
 
 end
 
-load_file(filename, opts)
+disk_space = PRTG::DiskSpace.load_xml('vfsmcbitsdb.xml')
+disk_space.items.each do |item|
+  p item.coverage_raw
+end
 
-print_subnodes(subnodes, opts)
+
